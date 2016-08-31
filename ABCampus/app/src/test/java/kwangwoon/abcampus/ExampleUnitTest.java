@@ -1,4 +1,4 @@
-package kwangwoon.abcompus;
+package kwangwoon.abcampus;
 
 import org.junit.Test;
 

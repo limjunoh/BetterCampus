@@ -1,4 +1,4 @@
-package kwangwoon.abcompus;
+package kwangwoon.abcampus;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

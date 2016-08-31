@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "kwangwoon.abcompus"
+        applicationId "kwangwoon.abcampus"
         minSdkVersion 21
         targetSdkVersion 23
         versionCode 1
