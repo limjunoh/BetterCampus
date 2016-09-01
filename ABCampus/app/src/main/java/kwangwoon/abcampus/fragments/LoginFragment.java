@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.AppCompatButton;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,34 +14,29 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import kwangwoon.abcampus.Constants;
+import kwangwoon.abcampus.Asynctask.LoginTask;
 import kwangwoon.abcampus.R;
-import kwangwoon.abcampus.RequestInterface;
-import kwangwoon.abcampus.models.ServerRequest;
-import kwangwoon.abcampus.models.ServerResponse;
 import kwangwoon.abcampus.models.User;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by Administrator on 2016-09-01.
  */
 public class LoginFragment extends Fragment implements View.OnClickListener{
+
     private AppCompatButton btn_login;
     private EditText et_studentid, et_password;
     private ProgressBar progress;
     private SharedPreferences pref;
     private TextView tv_findout;
+    private LoginTask loginTask;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_login, container, false);
-        return super.onCreateView(inflater, container, savedInstanceState);
+        initViews(view);
+        return view;
     }
 
     private void initViews(View view){
@@ -78,16 +72,23 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                     loginProcess(studentid,password);
                 }
                 else{
-
+                    Snackbar.make(getView(), "Fields are empty !", Snackbar.LENGTH_LONG).show();
                 }
         }
     }
-
-    private void loginProcess(String student_id, String password){      //여기를 바꿔야함 패킷 분석 필요
+    private boolean loginProcess(String student_id, String password){      //여기를 바꿔야함 패킷 분석 필요
         if(!check_form())
-            return;
+            return false;
 
-        Retrofit retrofit = new Retrofit.Builder()
+        User user = new User();
+        user.setStudent_id(student_id);
+        user.setPassword(password);
+
+        loginTask = new LoginTask(student_id,password);
+        loginTask.execute("11");
+
+        return true;
+        /*Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -106,8 +107,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
             @Override
             public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
                 ServerResponse resp = response.body();
-                Snackbar.make(getView(), resp.getMessage(), Snackbar.LENGTH_LONG).show();
-
+                Snackbar.make(rootview, resp.getMessage(), Snackbar.LENGTH_LONG).show();
                 if(resp.getResult().equals(Constants.SUCCESS)){
                     SharedPreferences.Editor editor = pref.edit();
                     editor.putBoolean(Constants.IS_LOGGED_IN, true);
@@ -126,7 +126,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                 Log.d(Constants.TAG, "Failed");
                 Snackbar.make(getView(), t.getLocalizedMessage(), Snackbar.LENGTH_LONG).show();
             }
-        });
+        });*/
     }
 
     private void goToFindOut(){
