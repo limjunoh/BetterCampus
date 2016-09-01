@@ -83,7 +83,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-    private void loginProcess(String student_id, String password){
+    private void loginProcess(String student_id, String password){      //여기를 바꿔야함 패킷 분석 필요
+        if(!check_form())
+            return;
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -139,5 +142,24 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_frame, profile);
         ft.commit();
+    }
+
+    private boolean check_form(){
+        String id = et_studentid.getText().toString();
+        String password = et_password.getText().toString();
+
+        if(id.equals("")){
+            Snackbar.make(getView(), "학번을 입력하세요", Snackbar.LENGTH_LONG).show();
+            et_studentid.setFocusable(true);
+            return false;
+        }
+
+        if(password.equals("")){
+            Snackbar.make(getView(), "비밀번호를 입력하세요", Snackbar.LENGTH_LONG).show();
+            et_password.setFocusable(true);
+            return false;
+        }
+
+        return true;
     }
 }
