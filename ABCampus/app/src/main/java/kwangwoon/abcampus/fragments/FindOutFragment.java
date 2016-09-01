@@ -18,5 +18,5 @@ import kwangwoon.abcampus.R;
  * Use the {@link FindOutFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FindOutFragment extends Fragment {
+public class FindOutFragment extends Fragment {  // fuction which find out id and password.
 }
